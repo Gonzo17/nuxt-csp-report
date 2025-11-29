@@ -93,11 +93,11 @@ Once configured, the module registers a POST endpoint that accepts CSP reports i
 ]
 ```
 
+The gathered data is normalized for logging and persisting:
+
 ### Normalized Report Type
 
 ```typescript
-import type { NormalizedCspReport } from 'nuxt-csp-report'
-
 interface NormalizedCspReport {
   ts: number
   documentURL?: string
@@ -109,6 +109,28 @@ interface NormalizedCspReport {
   disposition?: 'enforce' | 'report'
   raw: unknown
 }
+```
+
+If you persist the CSP reports with the `storageDriver` option, you can also access the reports with `useStorage` yourself:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-csp-report'],
+  cspReport: {
+    storageDriver: {
+      name: 'redis',
+      options: {
+        // Your redis configuration
+      } 
+    },
+  },
+})
+```
+
+```typescript
+import  { CSP_REPORT_STORAGE, type NormalizedCspReport } from 'nuxt-csp-report'
+
+const storage = useStorage<NormalizedCspReport>(CSP_REPORT_STORAGE)
 ```
 
 ## Contribution

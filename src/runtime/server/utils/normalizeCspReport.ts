@@ -1,16 +1,5 @@
 import { z } from 'zod'
-
-export interface NormalizedCspReport {
-  ts: number
-  documentURL?: string
-  blockedURL?: string
-  directive?: string
-  sourceFile?: string
-  line?: number
-  column?: number
-  disposition?: 'enforce' | 'report'
-  raw: unknown
-}
+import type { NormalizedCspReport } from '~/src/runtime/types'
 
 const reportToBodySchema = z.object({
   'document-uri': z.string().optional(),

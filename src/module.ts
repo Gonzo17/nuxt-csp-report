@@ -1,20 +1,7 @@
 import { defineNuxtModule, addServerHandler, createResolver } from '@nuxt/kit'
-import type { NormalizedCspReport } from './runtime/server/utils/normalizeCspReport'
-import type { BuiltinDriverOptions } from 'unstorage'
-
 import { defu } from 'defu'
-
-export interface NuxtCspReportModuleOptions {
-  endpoint: string
-  console: 'summary' | 'full' | false
-  storageDriver?: {
-    [driverName in keyof BuiltinDriverOptions]: {
-      name: driverName
-      options?: BuiltinDriverOptions[driverName] }
-  }[keyof BuiltinDriverOptions]
-}
-
-export type { NormalizedCspReport }
+import type { NuxtCspReportModuleOptions } from './types/module'
+import { CSP_REPORT_STORAGE } from './types/report'
 
 export default defineNuxtModule<NuxtCspReportModuleOptions>({
   meta: {
@@ -46,7 +33,7 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
       const { name, options = {} } = moduleOptions.storageDriver
       config.storage = defu(
         {
-          'csp-report-storage': {
+          [CSP_REPORT_STORAGE]: {
             driver: name,
             ...options,
           },
