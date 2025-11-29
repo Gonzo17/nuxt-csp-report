@@ -39,10 +39,23 @@ export default defineNuxtConfig({
 
 ## Configuration
 
-The module accepts the following options:
+### endpoint
+* Type: `string`
+* Default: `/api/csp-report`
+* Description: Path for the CSP report endpoint.
 
-- **endpoint** (string): Path for the CSP report endpoint. Default: `/api/csp-report`
-- **enableConsole** (boolean): Log reports to console on server. Default: `true`
+### console 
+* Type: `'summary' | 'full' | false`
+* Default: `'summary'`
+* Description: Log reports to console on server. `'full'` will print `NormalizedCspReport` object.
+
+### storageDriver
+* Type: `BuiltinDriverOptions`
+* Default: `undefined`
+* Description: Optional. Sets up a storage using `unstorage`, which is part of Nitro and Nuxt. You can use the same notation and drivers as in Nuxt:
+  * https://nuxt.com/docs/4.x/directory-structure/server#server-storage
+  * https://nitro.build/guide/storage
+  * https://unstorage.unjs.io/drivers
 
 ## Usage
 
