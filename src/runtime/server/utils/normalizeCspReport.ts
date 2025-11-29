@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import type { NormalizedCspReport } from '~/src/runtime/types'
+import type { NormalizedCspReport } from '~/src/types/report'
 
 const reportToBodySchema = z.object({
   'document-uri': z.string().optional(),
