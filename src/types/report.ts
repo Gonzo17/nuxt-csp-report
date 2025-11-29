@@ -9,5 +9,3 @@ export interface NormalizedCspReport {
   disposition?: 'enforce' | 'report'
   raw: unknown
 }
-
-export const CSP_REPORT_STORAGE = 'csp-report-storage'

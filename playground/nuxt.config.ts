@@ -4,7 +4,12 @@ export default defineNuxtConfig({
   cspReport: {
     console: 'full',
     endpoint: '/custom/csp-report',
-    storageDriver: { name: 'fs', options: { base: './.data/playground/csp-reports' } },
+    storage: {
+      driver: {
+        name: 'fs',
+        options: { base: './.data/playground/csp-reports' },
+      },
+    },
   },
   security: {
     headers: {

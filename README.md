@@ -48,10 +48,13 @@ export default defineNuxtConfig({
 * Default: `'summary'`
 * Description: Optional. Log reports to console on server. `'full'` will print the `NormalizedCspReport` object.
 
-### storageDriver
+### storage
+* Type: See fields below.
+* Description: Optional. Sets up a storage using `unstorage`, which is part of Nitro and Nuxt.
+
+### storage.driver
 * Type: `BuiltinDriverOptions`
-* Default: `undefined`
-* Description: Optional. Sets up a storage using `unstorage`, which is part of Nitro and Nuxt. You can use the same notation and drivers as in Nuxt:
+* Description: Defines the driver from `unstorage`. You can use the same notation and drivers as in Nuxt:
   * https://nuxt.com/docs/4.x/directory-structure/server#server-storage
   * https://nitro.build/guide/storage
   * https://unstorage.unjs.io/drivers
@@ -111,26 +114,28 @@ interface NormalizedCspReport {
 }
 ```
 
-If you persist the CSP reports with the `storageDriver` option, you can also access the reports with `useStorage` yourself:
+If you persist the CSP reports with the `storage` option, you can also access the reports with `useStorage` yourself:
 
 ```typescript
 export default defineNuxtConfig({
   modules: ['nuxt-csp-report'],
   cspReport: {
-    storageDriver: {
-      name: 'redis',
-      options: {
-        // Your redis configuration
-      } 
+    storage: {
+      driver: {
+        name: 'redis',
+        options: {
+          // Your redis configuration
+        } 
+      }
     },
   },
 })
 ```
 
 ```typescript
-import  { CSP_REPORT_STORAGE, type NormalizedCspReport } from 'nuxt-csp-report'
+import  { type NormalizedCspReport } from 'nuxt-csp-report'
 
-const storage = useStorage<NormalizedCspReport>(CSP_REPORT_STORAGE)
+const storage = useStorage<NormalizedCspReport>('csp-report-storage')
 ```
 
 ## Contribution

@@ -1,12 +1,10 @@
-import { defineEventHandler, readBody } from 'h3'
+import { useRuntimeConfig, useStorage, readBody, defineEventHandler } from '#imports'
 import { normalizeCspReport } from '../utils/normalizeCspReport'
 import { formatCspLog } from '../utils/formatCspLog'
-import { useRuntimeConfig } from '#imports'
-import { useStorage } from 'nitropack/runtime'
-import { CSP_REPORT_STORAGE, type NormalizedCspReport } from '../../../types/report'
+import type { NormalizedCspReport } from '../../../types/report'
 
 const runtimeConfig = useRuntimeConfig()
-const storage = runtimeConfig.cspReport?.storageDriver ? useStorage<NormalizedCspReport>(CSP_REPORT_STORAGE) : null
+const storage = runtimeConfig.cspReport?.storage ? useStorage<NormalizedCspReport>('csp-report-storage') : null
 
 export default defineEventHandler(async (event) => {
   try {

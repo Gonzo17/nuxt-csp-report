@@ -1,7 +1,9 @@
 import { defineNuxtModule, addServerHandler, createResolver } from '@nuxt/kit'
 import { defu } from 'defu'
 import type { NuxtCspReportModuleOptions } from './types/module'
-import { CSP_REPORT_STORAGE } from './types/report'
+
+export * from './types/module'
+export * from './types/report'
 
 export default defineNuxtModule<NuxtCspReportModuleOptions>({
   meta: {
@@ -18,7 +20,7 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
     nuxt.options.runtimeConfig.cspReport = {
       endpoint: moduleOptions.endpoint,
       console: moduleOptions.console,
-      storageDriver: moduleOptions.storageDriver,
+      storage: moduleOptions.storage,
     }
 
     addServerHandler({
@@ -28,12 +30,13 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
     })
 
     nuxt.hook('nitro:config', (config) => {
-      if (!moduleOptions.storageDriver) return
+      const storageDriver = config.runtimeConfig?.cspReport?.storage?.driver
+      if (!storageDriver) return
 
-      const { name, options = {} } = moduleOptions.storageDriver
+      const { name, options = {} } = storageDriver
       config.storage = defu(
         {
-          [CSP_REPORT_STORAGE]: {
+          'csp-report-storage': {
             driver: name,
             ...options,
           },
