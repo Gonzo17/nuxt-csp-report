@@ -31,23 +31,22 @@ Add it to your `nuxt.config.ts`:
 export default defineNuxtConfig({
   modules: ['nuxt-csp-report'],
   cspReport: {
-    endpoint: '/api/csp-report',
-    enableConsole: false,
+    //  Module options
   },
 })
 ```
 
-## Configuration
+## Options
 
 ### endpoint
 * Type: `string`
 * Default: `/api/csp-report`
-* Description: Path for the CSP report endpoint.
+* Description: Optional. Path for the CSP report endpoint.
 
 ### console 
 * Type: `'summary' | 'full' | false`
 * Default: `'summary'`
-* Description: Log reports to console on server. `'full'` will print `NormalizedCspReport` object.
+* Description: Optional. Log reports to console on server. `'full'` will print the `NormalizedCspReport` object.
 
 ### storageDriver
 * Type: `BuiltinDriverOptions`
