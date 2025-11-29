@@ -1,5 +1,18 @@
 export default defineNuxtConfig({
-  modules: ['../src/module'],
+  modules: ['../src/module', 'nuxt-security'],
   devtools: { enabled: true },
-  myModule: {},
+  cspReport: {
+    console: 'full',
+    endpoint: '/custom/csp-report',
+    storageDriver: { name: 'fs', options: { base: './.data/playground/csp-reports' } },
+  },
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'report-uri': '/custom/csp-report',
+        // CSP header to allow images in the playground
+        // 'img-src': ['\'self\'', 'data:', 'https://picsum.photos', 'https://*.picsum.photos'],
+      },
+    },
+  },
 })

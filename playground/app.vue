@@ -1,6 +1,12 @@
 <template>
   <div>
-    Nuxt module playground!
+    External image:
+    <img
+      alt="External image"
+      src="https://picsum.photos/200"
+      width="200"
+      height="200"
+    >
   </div>
 </template>
 

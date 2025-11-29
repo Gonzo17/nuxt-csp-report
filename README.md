@@ -1,42 +1,103 @@
-<!--
-Get your module up and running quickly.
-
-Find and replace all on all files (CMD+SHIFT+F):
-- Name: My Module
-- Package name: my-module
-- Description: My new Nuxt module
--->
-
-# My Module
+# Nuxt CSP Report
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
 
-My new Nuxt module for doing amazing things.
+A Nuxt module for collecting, normalizing, and persisting Content Security Policy (CSP) reports.
 
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
-<!-- - [🏀 Online playground](https://stackblitz.com/github/your-org/my-module?file=playground%2Fapp.vue) -->
-<!-- - [📖 &nbsp;Documentation](https://example.com) -->
 
 ## Features
 
-<!-- Highlight some of the features your module provide here -->
-- ⛰ &nbsp;Foo
-- 🚠 &nbsp;Bar
-- 🌲 &nbsp;Baz
+- 📋 Register a POST endpoint for CSP reports
+- 🔄 Support both legacy CSP and Report-To format reports
+- ✅ Validate and normalize reports with Zod
+- 💾 Persist reports via unstorage
+- 📝 Full TypeScript support with proper type exports
 
 ## Quick Setup
 
-Install the module to your Nuxt application with one command:
+Install the module to your Nuxt application:
 
 ```bash
-npx nuxi module add my-module
+npm install nuxt-csp-report
 ```
 
-That's it! You can now use My Module in your Nuxt app ✨
+Add it to your `nuxt.config.ts`:
 
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-csp-report'],
+  cspReport: {
+    endpoint: '/api/csp-report',
+    enableConsole: false,
+  },
+})
+```
+
+## Configuration
+
+The module accepts the following options:
+
+- **endpoint** (string): Path for the CSP report endpoint. Default: `/api/csp-report`
+- **enableConsole** (boolean): Log reports to console on server. Default: `true`
+
+## Usage
+
+Once configured, the module registers a POST endpoint that accepts CSP reports in two formats:
+
+### Legacy CSP Report Format
+
+```json
+{
+  "csp-report": {
+    "document-uri": "https://example.com",
+    "blocked-uri": "https://evil.com",
+    "violated-directive": "script-src",
+    "effective-directive": "script-src",
+    "original-policy": "script-src 'self'",
+    "disposition": "enforce"
+  }
+}
+```
+
+### Report-To Format
+
+```json
+[
+  {
+    "type": "csp-violation",
+    "body": {
+      "documentURI": "https://example.com",
+      "blockedURI": "https://evil.com",
+      "violatedDirective": "script-src",
+      "effectiveDirective": "script-src",
+      "originalPolicy": "script-src 'self'",
+      "disposition": "enforce"
+    }
+  }
+]
+```
+
+### Normalized Report Type
+
+```typescript
+import type { NormalizedCspReport } from 'nuxt-csp-report'
+
+interface NormalizedCspReport {
+  ts: number
+  documentURL?: string
+  blockedURL?: string
+  directive?: string
+  sourceFile?: string
+  line?: number
+  column?: number
+  disposition?: 'enforce' | 'report'
+  raw: unknown
+}
+```
 
 ## Contribution
 
@@ -45,40 +106,43 @@ That's it! You can now use My Module in your Nuxt app ✨
   
   ```bash
   # Install dependencies
-  npm install
+  pnpm install
   
   # Generate type stubs
-  npm run dev:prepare
+  pnpm run dev:prepare
   
   # Develop with the playground
-  npm run dev
+  pnpm run dev
   
   # Build the playground
-  npm run dev:build
+  pnpm run dev:build
   
   # Run ESLint
-  npm run lint
+  pnpm run lint
   
   # Run Vitest
-  npm run test
-  npm run test:watch
+  pnpm run test
+  pnpm run test:watch
+  
+  # Build the module
+  pnpm run prepack
   
   # Release new version
-  npm run release
+  pnpm run release
   ```
 
 </details>
 
 
 <!-- Badges -->
-[npm-version-src]: https://img.shields.io/npm/v/my-module/latest.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-version-href]: https://npmjs.com/package/my-module
+[npm-version-src]: https://img.shields.io/npm/v/nuxt-csp-report/latest.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-version-href]: https://npmjs.com/package/nuxt-csp-report
 
-[npm-downloads-src]: https://img.shields.io/npm/dm/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[npm-downloads-href]: https://npm.chart.dev/my-module
+[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-csp-report.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-downloads-href]: https://npm.chart.dev/nuxt-csp-report
 
-[license-src]: https://img.shields.io/npm/l/my-module.svg?style=flat&colorA=020420&colorB=00DC82
-[license-href]: https://npmjs.com/package/my-module
+[license-src]: https://img.shields.io/npm/l/nuxt-csp-report.svg?style=flat&colorA=020420&colorB=00DC82
+[license-href]: https://npmjs.com/package/nuxt-csp-report
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

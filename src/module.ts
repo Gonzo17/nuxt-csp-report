@@ -1,21 +1,58 @@
-import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'
+import { defineNuxtModule, addServerHandler, createResolver } from '@nuxt/kit'
+import type { NormalizedCspReport } from './runtime/server/utils/normalizeCspReport'
+import type { BuiltinDriverOptions } from 'unstorage'
 
-// Module options TypeScript interface definition
-export interface ModuleOptions {
-  test: boolean
+import { defu } from 'defu'
+
+export interface NuxtCspReportModuleOptions {
+  endpoint: string
+  console: 'summary' | 'full' | false
+  storageDriver?: {
+    [driverName in keyof BuiltinDriverOptions]: {
+      name: driverName
+      options?: BuiltinDriverOptions[driverName] }
+  }[keyof BuiltinDriverOptions]
 }
 
-export default defineNuxtModule<ModuleOptions>({
+export type { NormalizedCspReport }
+
+export default defineNuxtModule<NuxtCspReportModuleOptions>({
   meta: {
-    name: 'my-module',
-    configKey: 'myModule',
+    name: 'nuxt-csp-report',
+    configKey: 'cspReport',
   },
-  // Default configuration options of the Nuxt module
-  defaults: {},
-  setup(_options, _nuxt) {
+  defaults: {
+    endpoint: '/api/csp-report',
+    console: 'summary',
+  },
+  setup(moduleOptions, nuxt) {
     const resolver = createResolver(import.meta.url)
 
-    // Do not add the extension since the `.ts` will be transpiled to `.mjs` after `npm run prepack`
-    addPlugin(resolver.resolve('./runtime/plugin'))
+    nuxt.options.runtimeConfig.cspReport = {
+      endpoint: moduleOptions.endpoint,
+      console: moduleOptions.console,
+      storageDriver: moduleOptions.storageDriver,
+    }
+
+    addServerHandler({
+      route: moduleOptions.endpoint,
+      method: 'post',
+      handler: resolver.resolve('./runtime/server/api/csp-report.post'),
+    })
+
+    nuxt.hook('nitro:config', (config) => {
+      if (!moduleOptions.storageDriver) return
+
+      const { name, options = {} } = moduleOptions.storageDriver
+      config.storage = defu(
+        {
+          'csp-report-storage': {
+            driver: name,
+            ...options,
+          },
+        },
+        config.storage,
+      )
+    })
   },
 })
