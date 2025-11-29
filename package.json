@@ -35,6 +35,8 @@
   },
   "dependencies": {
     "@nuxt/kit": "^4.2.1",
+    "defu": "^6.1.4",
+    "unstorage": "^1.17.3",
     "zod": "^3.22.4"
   },
   "devDependencies": {
