@@ -7,11 +7,12 @@ export default defineNuxtConfig({
     storage: {
       driver: {
         name: 'fs',
-        options: { base: './.data/playground/csp-reports' },
+        options: { base: './.data/playground' },
       },
     },
   },
   security: {
+    rateLimiter: false,
     headers: {
       contentSecurityPolicy: {
         'report-uri': '/custom/csp-report',

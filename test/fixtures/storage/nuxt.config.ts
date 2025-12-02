@@ -8,7 +8,7 @@ export default defineNuxtConfig({
     endpoint: '/custom/csp-report',
     storage: {
       driver: {
-        name: 'fs', options: { base: './.data/test/csp-reports' } },
+        name: 'fs', options: { base: './.data/test' } },
     },
   },
 })
