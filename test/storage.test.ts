@@ -43,7 +43,7 @@ describe('[nuxt-csp-report] with storage', async () => {
     })
 
     expect(await $fetch('/api/reports')).toEqual({
-      keys: [expect.stringMatching(/^csp:\d+:[\w-]{8}-[\w-]{4}-[\w-]{4}-[\w-]{4}-[\w-]{12}$/)],
+      keys: [expect.stringMatching(/^csp-report:\d+:[\w-]{6}$/)],
       items: [expect.objectContaining({
         ts: expect.any(Number),
         documentURL: 'http://localhost:3000/',

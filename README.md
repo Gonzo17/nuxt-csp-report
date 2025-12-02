@@ -59,9 +59,63 @@ export default defineNuxtConfig({
   * https://nitro.build/guide/storage
   * https://unstorage.unjs.io/drivers
 
+### storage.keyPrefix 
+* Type: `string`
+* Default: `csp-report`
+* Description: Optional. Key prefix for the stored reports.
+
 ## Usage
 
-Once configured, the module registers a POST endpoint that accepts CSP reports in two formats:
+The module is ready to go with the defaults.
+In most use cases simple logs are sufficient. If you want to analyze CSP reports, you can use the `storage` option to persist the reports in a KV store. 
+
+### nuxt-security
+
+The Content Security Policy is set through specific headers. You can handle that yourself with Nuxt/Nitro, but I highly recommend using [nuxt-security](https://github.com/Baroshem/nuxt-security). 
+Here is a minimal example of how to use the two moduls in combination:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-security', 'nuxt-csp-report'],
+  security: {
+    headers: {
+      contentSecurityPolicy: {
+        'report-uri': '/api/csp-report',
+        // your CSP headers
+      },
+    },
+  },
+})
+```
+
+### Advanced: Access reports
+
+Depending on your use case you might want to access the CSP reports. You can do that with `useStorage`:
+
+```typescript
+export default defineNuxtConfig({
+  modules: ['nuxt-csp-report'],
+  cspReport: {
+    storage: {
+      driver: {
+        name: 'redis',
+        options: {
+          // Your redis configuration
+        } 
+      }
+    },
+  },
+})
+```
+
+```typescript
+import  { type NormalizedCspReport } from 'nuxt-csp-report'
+
+const storage = useStorage<NormalizedCspReport>('csp-report-storage')
+```
+
+
+## Types
 
 ### Legacy CSP Report Format
 
@@ -96,9 +150,7 @@ Once configured, the module registers a POST endpoint that accepts CSP reports i
 ]
 ```
 
-The gathered data is normalized for logging and persisting:
-
-### Normalized Report Type
+### Normalized Report
 
 ```typescript
 interface NormalizedCspReport {
@@ -112,30 +164,6 @@ interface NormalizedCspReport {
   disposition?: 'enforce' | 'report'
   raw: unknown
 }
-```
-
-If you persist the CSP reports with the `storage` option, you can also access the reports with `useStorage` yourself:
-
-```typescript
-export default defineNuxtConfig({
-  modules: ['nuxt-csp-report'],
-  cspReport: {
-    storage: {
-      driver: {
-        name: 'redis',
-        options: {
-          // Your redis configuration
-        } 
-      }
-    },
-  },
-})
-```
-
-```typescript
-import  { type NormalizedCspReport } from 'nuxt-csp-report'
-
-const storage = useStorage<NormalizedCspReport>('csp-report-storage')
 ```
 
 ## Contribution

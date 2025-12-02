@@ -20,7 +20,12 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
     nuxt.options.runtimeConfig.cspReport = {
       endpoint: moduleOptions.endpoint,
       console: moduleOptions.console,
-      storage: moduleOptions.storage,
+      storage: moduleOptions.storage
+        ? {
+            keyPrefix: moduleOptions.storage.keyPrefix || 'csp-report',
+            driver: moduleOptions.storage.driver,
+          }
+        : undefined,
     }
 
     addServerHandler({

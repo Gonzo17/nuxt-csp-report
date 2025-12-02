@@ -23,9 +23,9 @@ export default defineEventHandler(async (event) => {
           break
       }
       if (storage) {
-        const id = globalThis.crypto.randomUUID()
+        const suffix = Math.random().toString(36).slice(2, 8)
         const timestamp = Date.now()
-        const key = `csp:${timestamp}:${id}`
+        const key = `${config.storage.keyPrefix}:${timestamp}:${suffix}`
         await storage.setItem(key, report)
       }
     }
