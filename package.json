@@ -2,7 +2,10 @@
   "name": "nuxt-csp-report",
   "version": "1.0.0",
   "description": "A Nuxt module for collecting, normalizing, and persisting Content Security Policy reports",
-  "repository": "https://github.com/Gonzo17/nuxt-csp-report",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Gonzo17/nuxt-csp-report.git"
+  },
   "homepage": "https://github.com/Gonzo17/nuxt-csp-report",
   "license": "MIT",
   "keywords": [
