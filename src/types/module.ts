@@ -2,6 +2,7 @@ import type { BuiltinDriverOptions } from 'unstorage'
 
 export interface NuxtCspReportModuleOptions {
   endpoint: string
+  reportingEndpointsHeader?: boolean
   console: 'summary' | 'full' | false
   storage?: {
     keyPrefix?: string

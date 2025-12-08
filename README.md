@@ -56,6 +56,11 @@ export default defineNuxtConfig({
 * Default: `/api/csp-report`
 * Description: Optional. Path for the CSP report endpoint.
 
+### reportingEndpointsHeader 
+* Type: `boolean`
+* Default: `false`
+* Description: Optional. Adds the `Reporting-Endpoints` header to your HTML responses, using `'csp-endpoint'` as the key and `endpoint` from the configuration as the value. This header is needed if you want to use `report-to csp-endpoint` in your CSP configuration.
+
 ### console 
 * Type: `'summary' | 'full' | false`
 * Default: `'summary'`

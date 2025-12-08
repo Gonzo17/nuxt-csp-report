@@ -13,12 +13,14 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
   defaults: {
     endpoint: '/api/csp-report',
     console: 'summary',
+    reportingEndpointsHeader: false,
   },
   setup(moduleOptions, nuxt) {
     const resolver = createResolver(import.meta.url)
 
     nuxt.options.runtimeConfig.cspReport = {
       endpoint: moduleOptions.endpoint,
+      reportingEndpointsHeader: moduleOptions.reportingEndpointsHeader,
       console: moduleOptions.console,
       storage: moduleOptions.storage
         ? {
@@ -35,7 +37,15 @@ export default defineNuxtModule<NuxtCspReportModuleOptions>({
     })
 
     nuxt.hook('nitro:config', (config) => {
-      const storageDriver = config.runtimeConfig?.cspReport?.storage?.driver
+      const cspReportConfig = nuxt.options.runtimeConfig.cspReport
+      if (!cspReportConfig) return
+
+      if (cspReportConfig.reportingEndpointsHeader) {
+        config.plugins = config.plugins || []
+        config.plugins.push(resolver.resolve('./runtime/nitro/plugin/reporting-endpoints-header'))
+      }
+
+      const storageDriver = cspReportConfig.storage?.driver
       if (!storageDriver) return
 
       const { name, options = {} } = storageDriver

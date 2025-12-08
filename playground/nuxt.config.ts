@@ -4,6 +4,7 @@ export default defineNuxtConfig({
   cspReport: {
     console: 'full',
     endpoint: '/custom/csp-report',
+    reportingEndpointsHeader: true,
     storage: {
       driver: {
         name: 'fs',
@@ -16,6 +17,7 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: {
         'report-uri': '/custom/csp-report',
+        'report-to': 'csp-endpoint',
         // CSP header to allow images in the playground
         // 'img-src': ['\'self\'', 'data:', 'https://picsum.photos', 'https://*.picsum.photos'],
       },
