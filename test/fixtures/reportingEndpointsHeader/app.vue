@@ -1,5 +1,5 @@
 <template>
-  <div>storage</div>
+  <div>reporting endpoints header</div>
 </template>
 
 <script setup>

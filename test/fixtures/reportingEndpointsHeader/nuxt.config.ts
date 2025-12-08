@@ -5,9 +5,7 @@ export default defineNuxtConfig({
     NuxtCspReportModule,
   ],
   cspReport: {
-    storage: {
-      driver: {
-        name: 'fs', options: { base: './.data/test' } },
-    },
+    reportingEndpointsHeader: true,
+    endpoint: '/custom/csp-report',
   },
 })

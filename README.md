@@ -4,8 +4,6 @@ This module is work in progress. Feedback is very welcome. 🙂 Please open an i
 
 Planned todos before the first release:
 
-- Reporting endpoints header
-- More tests, especially for different setups with varying module configuration
 - Tests with real browsers (at least manually, but prefered automated, e.g. with Playwright)
 - Update the documentation, add a section to give more information about CSP and CSP reports
 

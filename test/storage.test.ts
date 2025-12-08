@@ -18,7 +18,7 @@ describe('[nuxt-csp-report] with storage', async () => {
       items: [],
     })
 
-    const response = await $fetch('/custom/csp-report', { method: 'POST', body: {} })
+    const response = await $fetch('/api/csp-report', { method: 'POST', body: {} })
     expect(response).toStrictEqual({
       ok: true,
     })
@@ -35,9 +35,9 @@ describe('[nuxt-csp-report] with storage', async () => {
       items: [],
     })
 
-    const cspReport = { 'csp-report': { 'document-uri': 'http://localhost:3000/', 'referrer': '', 'violated-directive': 'img-src', 'effective-directive': 'img-src', 'original-policy': 'base-uri \'none\'; font-src \'self\' https: data:; form-action \'self\'; frame-ancestors \'self\'; img-src \'self\' data:; object-src \'none\'; script-src-attr \'none\'; style-src \'self\' https: \'unsafe-inline\'; script-src \'self\' https: \'unsafe-inline\' \'strict-dynamic\' \'nonce-UkSxYctV6Dnr92rrBYJOI32S\'; upgrade-insecure-requests; report-uri /custom/csp-report;', 'disposition': 'enforce', 'blocked-uri': 'https://picsum.photos/200', 'line-number': 10, 'source-file': 'http://localhost:3000/', 'status-code': 200, 'script-sample': '' } }
+    const cspReport = { 'csp-report': { 'document-uri': 'http://localhost:3000/', 'referrer': '', 'violated-directive': 'img-src', 'effective-directive': 'img-src', 'original-policy': 'base-uri \'none\'; font-src \'self\' https: data:; form-action \'self\'; frame-ancestors \'self\'; img-src \'self\' data:; object-src \'none\'; script-src-attr \'none\'; style-src \'self\' https: \'unsafe-inline\'; script-src \'self\' https: \'unsafe-inline\' \'strict-dynamic\' \'nonce-UkSxYctV6Dnr92rrBYJOI32S\'; upgrade-insecure-requests; report-uri /api/csp-report;', 'disposition': 'enforce', 'blocked-uri': 'https://picsum.photos/200', 'line-number': 10, 'source-file': 'http://localhost:3000/', 'status-code': 200, 'script-sample': '' } }
 
-    const response = await $fetch('/custom/csp-report', { method: 'POST', body: cspReport })
+    const response = await $fetch('/api/csp-report', { method: 'POST', body: cspReport })
     expect(response).toStrictEqual({
       ok: true,
     })
@@ -65,7 +65,7 @@ describe('[nuxt-csp-report] with storage', async () => {
 
     const invalidCspReport = { 'csp-rep': { 'uri': 'http://localhost:3000/', 'violated-directive': 'img-src' } }
 
-    const response = await $fetch('/custom/csp-report', { method: 'POST', body: invalidCspReport })
+    const response = await $fetch('/api/csp-report', { method: 'POST', body: invalidCspReport })
     expect(response).toStrictEqual({
       ok: true,
     })
