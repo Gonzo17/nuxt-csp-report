@@ -1,3 +1,16 @@
+## ⚠ Work in progress ⚠ 
+
+This module is work in progress. Feedback is very welcome. 🙂 Please open an issue if you have suggestions, ideas, bug reports or questions.
+
+Planned todos before the first release:
+
+- Reporting endpoints header
+- More tests, especially for different setups with varying module configuration
+- Tests with real browsers (at least manually, but prefered automated, e.g. with Playwright)
+- Update the documentation, add a section to give more information about CSP and CSP reports
+
+Thank you for your feedback!
+
 # Nuxt CSP Report
 
 [![npm version][npm-version-src]][npm-version-href]
