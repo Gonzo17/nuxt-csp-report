@@ -45,14 +45,14 @@ describe('[nuxt-csp-report] with storage', async () => {
     expect(await $fetch('/api/reports')).toEqual({
       keys: [expect.stringMatching(/^csp-report:\d+:[\w-]{6}$/)],
       items: [expect.objectContaining({
-        ts: expect.any(Number),
+        timestamp: expect.any(Number),
         documentURL: 'http://localhost:3000/',
         blockedURL: 'https://picsum.photos/200',
         directive: 'img-src',
         sourceFile: 'http://localhost:3000/',
         line: 10,
         disposition: 'enforce',
-        raw: cspReport['csp-report'],
+        raw: cspReport,
       })],
     })
   })

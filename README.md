@@ -1,14 +1,3 @@
-## ⚠ Work in progress ⚠ 
-
-This module is work in progress. Feedback is very welcome. 🙂 Please open an issue if you have suggestions, ideas, bug reports or questions.
-
-Planned todos before the first release:
-
-- Tests with real browsers (at least manually, but prefered automated, e.g. with Playwright)
-- Update the documentation, add a section to give more information about CSP and CSP reports
-
-Thank you for your feedback!
-
 # Nuxt CSP Report
 
 [![npm version][npm-version-src]][npm-version-href]
@@ -18,14 +7,21 @@ Thank you for your feedback!
 
 A Nuxt module for collecting, normalizing, and persisting Content Security Policy (CSP) reports.
 
-- [✨ &nbsp;Release Notes](/CHANGELOG.md)
+[✨&nbsp;Release Notes](/CHANGELOG.md)
+
+## What is CSP and CSP reports?
+
+The CSP is a HTTP response header that allows you to control which resources a document is allowed to load. For example setting `Content-Security-Policy: script-src example.com;` will prevent any script tag from loading a source that is not from `example.com`. Any violation will be logged in the console of the browser. Additionally, a reporting endpoint can be set in the CSP header where the browser will send the CSP report to.
+
+Once you decide to secure your website with CSP, you most likely want to analyze on production if your CSP headers are configured properly. That can be tricky the more external resources are loaded. Especially dynamically loaded scripts, e.g. depending on your country or your consent, are not always the same for every user. That's where the CSP reports are helpful, because they show the real CSP violations that users experience in their browsers.
 
 ## Features
 
-- 📋 Register a POST endpoint for CSP reports
-- 🔄 Support both legacy CSP and Report-To format reports
-- ✅ Validate and normalize reports with Zod
-- 💾 Persist reports via unstorage
+- 📋 Registers a POST endpoint for CSP reports
+- 📡 Adds the `Reporting-Endpoints` header to your responses for `report-to` support
+- 🔄 Supports both legacy `report-uri` and `report-to` format reports
+- ✅ Validates and normalizes reports with Zod
+- 💾 Persists reports via unstorage
 - 📝 Full TypeScript support with proper type exports
 
 ## Quick Setup
@@ -46,39 +42,6 @@ export default defineNuxtConfig({
   },
 })
 ```
-
-## Options
-
-### endpoint
-* Type: `string`
-* Default: `/api/csp-report`
-* Description: Optional. Path for the CSP report endpoint.
-
-### reportingEndpointsHeader 
-* Type: `boolean`
-* Default: `false`
-* Description: Optional. Adds the `Reporting-Endpoints` header to your HTML responses, using `'csp-endpoint'` as the key and `endpoint` from the configuration as the value. This header is needed if you want to use `report-to csp-endpoint` in your CSP configuration.
-
-### console 
-* Type: `'summary' | 'full' | false`
-* Default: `'summary'`
-* Description: Optional. Log reports to console on server. `'full'` will print the `NormalizedCspReport` object.
-
-### storage
-* Type: See fields below.
-* Description: Optional. Sets up a storage using `unstorage`, which is part of Nitro and Nuxt.
-
-### storage.driver
-* Type: `BuiltinDriverOptions`
-* Description: Defines the driver from `unstorage`. You can use the same notation and drivers as in Nuxt:
-  * https://nuxt.com/docs/4.x/directory-structure/server#server-storage
-  * https://nitro.build/guide/storage
-  * https://unstorage.unjs.io/drivers
-
-### storage.keyPrefix 
-* Type: `string`
-* Default: `csp-report`
-* Description: Optional. Key prefix for the stored reports.
 
 ## Usage
 
@@ -130,57 +93,39 @@ import  { type NormalizedCspReport } from 'nuxt-csp-report'
 const storage = useStorage<NormalizedCspReport>('csp-report-storage')
 ```
 
+## Options
 
-## Types
+### endpoint
+* Type: `string`
+* Default: `/api/csp-report`
+* Description: Optional. Path for the CSP report endpoint.
 
-### Legacy CSP Report Format
+### reportingEndpointsHeader 
+* Type: `boolean`
+* Default: `false`
+* Description: Optional. Adds the `Reporting-Endpoints` header to your HTML responses, using `'csp-endpoint'` as the key and `endpoint` from the configuration as the value. This header is needed if you want to use `report-to csp-endpoint` in your CSP configuration.
 
-```json
-{
-  "csp-report": {
-    "document-uri": "https://example.com",
-    "blocked-uri": "https://evil.com",
-    "violated-directive": "script-src",
-    "effective-directive": "script-src",
-    "original-policy": "script-src 'self'",
-    "disposition": "enforce"
-  }
-}
-```
+### console 
+* Type: `'summary' | 'full' | false`
+* Default: `'summary'`
+* Description: Optional. Log reports to console on server. `'full'` will print the `NormalizedCspReport` object.
 
-### Report-To Format
+### storage
+* Type: See fields below.
+* Description: Optional. Sets up a storage using `unstorage`, which is part of Nitro and Nuxt.
 
-```json
-[
-  {
-    "type": "csp-violation",
-    "body": {
-      "documentURI": "https://example.com",
-      "blockedURI": "https://evil.com",
-      "violatedDirective": "script-src",
-      "effectiveDirective": "script-src",
-      "originalPolicy": "script-src 'self'",
-      "disposition": "enforce"
-    }
-  }
-]
-```
+### storage.driver
+* Type: `BuiltinDriverOptions`
+* Description: Defines the driver from `unstorage`. You can use the same notation and drivers as in Nuxt:
+  * https://nuxt.com/docs/4.x/directory-structure/server#server-storage
+  * https://nitro.build/guide/storage
+  * https://unstorage.unjs.io/drivers
 
-### Normalized Report
+### storage.keyPrefix 
+* Type: `string`
+* Default: `csp-report`
+* Description: Optional. Key prefix for the stored reports.
 
-```typescript
-interface NormalizedCspReport {
-  ts: number
-  documentURL?: string
-  blockedURL?: string
-  directive?: string
-  sourceFile?: string
-  line?: number
-  column?: number
-  disposition?: 'enforce' | 'report'
-  raw: unknown
-}
-```
 
 ## Contribution
 

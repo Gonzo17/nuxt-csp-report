@@ -1,4 +1,4 @@
-import type { NormalizedCspReport } from './normalizeCspReport'
+import type { NormalizedCspReport } from '../../../types/report'
 
 export function formatCspLog(report: NormalizedCspReport) {
   const parts = []

@@ -1,111 +1,87 @@
 import { z } from 'zod'
 import type { NormalizedCspReport } from '../../../types/report'
 
-const reportToBodySchema = z.object({
-  'document-uri': z.string().optional(),
-  'documentURI': z.string().optional(),
-  'blocked-uri': z.string().optional(),
-  'blockedURI': z.string().optional(),
-  'blockedUri': z.string().optional(),
-  'effective-directive': z.string().optional(),
-  'effectiveDirective': z.string().optional(),
-  'violated-directive': z.string().optional(),
-  'violatedDirective': z.string().optional(),
-  'source-file': z.string().optional(),
-  'sourceFile': z.string().optional(),
-  'line-number': z.number().optional(),
-  'lineNumber': z.number().optional(),
-  'column-number': z.number().optional(),
-  'columnNumber': z.number().optional(),
-  'disposition': z.enum(['enforce', 'report']).optional(),
+const reportUriSchema = z.object({
+  'csp-report': z.object({
+    'blocked-uri': z.string(),
+    'disposition': z.enum(['enforce', 'report']),
+    'document-uri': z.string(),
+    'effective-directive': z.string(),
+    'line-number': z.number().optional(),
+    'original-policy': z.string().optional(),
+    'referrer': z.string().optional(),
+    'script-sample': z.string().optional(),
+    'source-file': z.string().optional(),
+    'status-code': z.number().optional(),
+    'violated-directive': z.string(),
+  }),
 }).passthrough()
+
+export type ReportUriFormat = z.infer<typeof reportUriSchema>
 
 const reportToEntrySchema = z.object({
+  age: z.number(),
+  body: z.object({
+    blockedURL: z.string(),
+    columnNumber: z.number().optional(),
+    disposition: z.enum(['enforce', 'report']),
+    documentURL: z.string(),
+    effectiveDirective: z.string(),
+    lineNumber: z.number().optional(),
+    originalPolicy: z.string(),
+    referrer: z.string().optional(),
+    sample: z.string().optional(),
+    sourceFile: z.string().optional(),
+    statusCode: z.number(),
+  }),
   type: z.string(),
-  body: z.unknown().optional(),
+  url: z.string(),
+  user_agent: z.string(),
 }).passthrough()
 
-function normalizeField(value: unknown): string | undefined {
-  if (typeof value === 'string') {
-    return value || undefined
-  }
-  return undefined
-}
+const reportToSchema = reportToEntrySchema.array()
 
-function normalizeNumber(value: unknown): number | undefined {
-  if (typeof value === 'number') {
-    return value
-  }
-  return undefined
-}
-
-function normalizeSingleReport(
-  data: unknown,
-): NormalizedCspReport {
-  const ts = Date.now()
-  const baseReport: NormalizedCspReport = {
-    ts,
-    raw: data,
-  }
-
-  if (!data || typeof data !== 'object') {
-    return baseReport
-  }
-
-  try {
-    const parsed = reportToBodySchema.parse(data)
-    const dataObj = parsed as Record<string, unknown>
-
-    return {
-      ...baseReport,
-      documentURL: normalizeField(dataObj['document-uri'] || dataObj['documentURI']),
-      blockedURL: normalizeField(
-        dataObj['blocked-uri'] || dataObj['blockedURI'] || dataObj['blockedUri'],
-      ),
-      directive: normalizeField(
-        dataObj['effective-directive']
-        || dataObj['effectiveDirective']
-        || dataObj['violated-directive']
-        || dataObj['violatedDirective'],
-      ),
-      sourceFile: normalizeField(dataObj['source-file'] || dataObj['sourceFile']),
-      line: normalizeNumber(dataObj['line-number'] || dataObj['lineNumber']),
-      column: normalizeNumber(dataObj['column-number'] || dataObj['columnNumber']),
-      disposition: (dataObj['disposition'] as 'enforce' | 'report' | undefined) || undefined,
-    }
-  }
-  catch {
-    return baseReport
-  }
-}
+export type ReportToEntryFormat = z.infer<typeof reportToEntrySchema>
+export type ReportToFormat = z.infer<typeof reportToSchema>
 
 export function normalizeCspReport(
   input: unknown,
 ): NormalizedCspReport[] {
-  if (!input || typeof input !== 'object') {
+  if (!input) {
     return []
   }
 
-  if ('csp-report' in input) {
-    return [normalizeSingleReport(input['csp-report'])]
-  }
+  try {
+    if (typeof input === 'object' && 'csp-report' in input) {
+      const parsed = reportUriSchema.parse(input)
+      return [{ raw: parsed, timestamp: Date.now(),
+        documentURL: parsed['csp-report']['document-uri'],
+        blockedURL: parsed['csp-report']['blocked-uri'],
+        directive: parsed['csp-report']['violated-directive'],
+        sourceFile: parsed['csp-report']['source-file'],
+        line: parsed['csp-report']['line-number'],
+        disposition: parsed['csp-report']['disposition'],
+      }]
+    }
 
-  if (Array.isArray(input)) {
-    return input
-      .filter((entry) => {
-        try {
-          const parsed = reportToEntrySchema.parse(entry)
-          return parsed['type'] === 'csp-violation'
-        }
-        catch {
-          return false
-        }
+    if (Array.isArray(input)) {
+      const parsed = reportToSchema.parse(input)
+      return parsed.map((item) => {
+        return {
+          raw: item,
+          timestamp: Date.now(),
+          documentURL: item.body.documentURL,
+          blockedURL: item.body.blockedURL,
+          directive: item.body.effectiveDirective,
+          sourceFile: item.body.sourceFile,
+          line: item.body.lineNumber,
+          disposition: item.body.disposition,
+        } satisfies NormalizedCspReport
       })
-      .map((entry) => {
-        const typedEntry = entry as Record<string, unknown>
-        const body = typedEntry['body']
-        return normalizeSingleReport(body)
-      })
+    }
+  }
+  catch {
+    // Ignore parsing errors
   }
 
   return []
