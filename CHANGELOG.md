@@ -1,4 +1,27 @@
 
+## v1.0.0-alpha.2
+
+[compare changes](https://github.com/Gonzo17/nuxt-csp-report/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)
+
+### 🚀 Enhancements
+
+- **module:** Simplify log summary, so it only contains the most important information ([9393c5b](https://github.com/Gonzo17/nuxt-csp-report/commit/9393c5b))
+
+### 🩹 Fixes
+
+- **security:** Potential fix for code scanning alert no. 2: Workflow does not contain permissions ([8b91e6b](https://github.com/Gonzo17/nuxt-csp-report/commit/8b91e6b))
+- **security:** Fix permissions in github workflow ([a93e3cb](https://github.com/Gonzo17/nuxt-csp-report/commit/a93e3cb))
+
+### 🏡 Chore
+
+- Change ESLint config from mjs to ts file ([8e2c65e](https://github.com/Gonzo17/nuxt-csp-report/commit/8e2c65e))
+- Update dependencies ([d83bd52](https://github.com/Gonzo17/nuxt-csp-report/commit/d83bd52))
+- Update dependencies ([e29d58a](https://github.com/Gonzo17/nuxt-csp-report/commit/e29d58a))
+
+### ❤️ Contributors
+
+- David Gonzalez Casin <david.gonzalezcasin@gmail.com>
+
 ## v1.0.0-alpha.1
 
 
