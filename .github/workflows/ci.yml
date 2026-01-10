@@ -34,6 +34,7 @@ jobs:
     name: Test (Nuxt ${{ matrix.nuxt }})
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         # writeTypes is available from Nuxt 3.7+, so keep 3.x runs at >=3.7
         nuxt: ["3.7.0", "3.10.0", "3.20.0", "^3", "4.0.0", "4.1.0", "4.2.2", "latest"]
