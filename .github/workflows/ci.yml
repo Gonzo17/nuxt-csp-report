@@ -12,6 +12,44 @@ on:
       - main
 
 jobs:
+  resolve-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.nuxt.outputs.matrix }}
+
+    steps:
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+
+      - name: Resolve Nuxt versions
+        id: nuxt
+        run: |
+          VERSIONS=$(npm view nuxt versions --json)
+          VERSIONS="$VERSIONS" node - <<'NODE' >> "$GITHUB_OUTPUT"
+          const versions = JSON.parse(process.env.VERSIONS)
+          const semverGte = (a, b) => {
+            const pa = a.split('.').map(Number)
+            const pb = b.split('.').map(Number)
+            for (let i = 0; i < 3; i++) {
+              if ((pa[i] || 0) > (pb[i] || 0)) return true
+              if ((pa[i] || 0) < (pb[i] || 0)) return false
+            }
+            return true
+          }
+          const pick = (major, minVersion, count) =>
+            versions
+              .filter(v => v.startsWith(`${major}.`) && semverGte(v, minVersion))
+              .slice(-count)
+
+          const nuxt = [
+            ...pick(3, '3.7.0', 5), // writeTypes is available from Nuxt 3.7+
+            ...pick(4, '0.0.0', 5),
+          ]
+
+          console.log(`matrix=${JSON.stringify({ nuxt })}`)
+          NODE
+
   lint:
     runs-on: ubuntu-latest
 
@@ -35,9 +73,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
-      matrix:
-        # writeTypes is available from Nuxt 3.7+, so keep 3.x runs at >=3.7
-        nuxt: ["3.7.0", "3.10.0", "3.20.0", "^3", "4.0.0", "4.1.0", "4.2.2", "latest"]
+      matrix: ${{ fromJson(needs.resolve-versions.outputs.matrix) }}
+    needs: resolve-versions
 
     steps:
       - uses: actions/checkout@v6
