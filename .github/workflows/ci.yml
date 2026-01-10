@@ -37,12 +37,12 @@ jobs:
             }
             return true
           }
-          // Keep stable releases only (no -alpha/-rc), 3.x >=3.7 (writeTypes available), and all 4.x
+          // Keep stable releases only (no -alpha/-rc)
           const pickAll = (major, minVersion) =>
             versions.filter(v => v.startsWith(`${major}.`) && !v.includes('-') && semverGte(v, minVersion))
 
           const nuxt = [
-            ...pickAll(3, '3.7.0'),
+            ...pickAll(3, '3.12.0'),
             ...pickAll(4, '0.0.0'),
           ]
 
