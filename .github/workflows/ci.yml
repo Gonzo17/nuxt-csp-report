@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nuxt: ["4.0.0", "4.1.0", "4.2.0", "latest"]
+        nuxt: ["3.0.0", "3.5.0", "3.10.0", "3.20.0", "^3", "4.0.0", "4.1.0", "4.2.2", "latest"]
 
     steps:
       - uses: actions/checkout@v6
@@ -49,13 +49,15 @@ jobs:
       - name: Set Nuxt version
         run: |
           pnpm pkg set devDependencies.nuxt=${{ matrix.nuxt }}
+          pnpm pkg set dependencies.@nuxt/kit=${{ matrix.nuxt }}
+          pnpm pkg set devDependencies.@nuxt/schema=${{ matrix.nuxt }}
           echo "Selected Nuxt version: ${{ matrix.nuxt }}"
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
       - name: Show installed Nuxt version
-        run: node -e "console.log(require('nuxt/package.json').version)"
+        run: node -e "['nuxt','@nuxt/kit','@nuxt/schema'].forEach(p=>console.log(p+':',require(p+'/package.json').version))"
 
       - name: Playground prepare
         run: pnpm dev:prepare
