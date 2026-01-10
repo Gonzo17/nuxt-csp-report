@@ -1,0 +1,24 @@
+{
+  "raw": {
+    "csp-report": {
+      "blocked-uri": "https://picsum.photos/200",
+      "disposition": "enforce",
+      "document-uri": "http://localhost:3000/",
+      "effective-directive": "img-src",
+      "line-number": 10,
+      "original-policy": "base-uri 'none'; font-src 'self' https: data:; form-action 'self'; frame-ancestors 'self'; img-src 'self' data:; object-src 'none'; script-src-attr 'none'; style-src 'self' https: 'unsafe-inline'; script-src 'self' https: 'unsafe-inline' 'strict-dynamic' 'nonce-LcyU60IjN8oVXCUnHYYNUvGW'; upgrade-insecure-requests; report-uri /api/csp-report;",
+      "referrer": "",
+      "script-sample": "",
+      "source-file": "http://localhost:3000/",
+      "status-code": 200,
+      "violated-directive": "img-src"
+    }
+  },
+  "timestamp": 123,
+  "documentURL": "http://localhost:3000/",
+  "blockedURL": "https://picsum.photos/200",
+  "directive": "img-src",
+  "sourceFile": "http://localhost:3000/",
+  "line": 10,
+  "disposition": "enforce"
+}
