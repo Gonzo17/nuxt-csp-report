@@ -1,4 +1,20 @@
 
+## v1.0.0
+
+[compare changes](https://github.com/Gonzo17/nuxt-csp-report/compare/v1.0.0-alpha.3...v1.0.0)
+
+### 🚀 Enhancements
+
+- Improve CSP report normalization and error handling ([#11](https://github.com/Gonzo17/nuxt-csp-report/pull/11))
+
+### 🏡 Chore
+
+- Update release script to remove alpha tag from publish command ([737a8e0](https://github.com/Gonzo17/nuxt-csp-report/commit/737a8e0))
+
+### ❤️ Contributors
+
+- David Gonzalez Casin <david.gonzalezcasin@gmail.com>
+
 ## v1.0.0-alpha.3
 
 [compare changes](https://github.com/Gonzo17/nuxt-csp-report/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
