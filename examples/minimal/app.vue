@@ -18,6 +18,7 @@ const { data: reports, pending } = useFetch('/api/reports')
           height="200"
         >
       </div>
+      <p>Refresh the page to see new reports.</p>
     </header>
 
     <section>
