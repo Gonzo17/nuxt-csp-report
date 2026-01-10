@@ -37,14 +37,13 @@ jobs:
             }
             return true
           }
-          const pick = (major, minVersion, count) =>
-            versions
-              .filter(v => v.startsWith(`${major}.`) && semverGte(v, minVersion))
-              .slice(-count)
+          // Keep all 3.x >=3.7 (writeTypes available) and all 4.x
+          const pickAll = (major, minVersion) =>
+            versions.filter(v => v.startsWith(`${major}.`) && semverGte(v, minVersion))
 
           const nuxt = [
-            ...pick(3, '3.7.0', 5), // writeTypes is available from Nuxt 3.7+
-            ...pick(4, '0.0.0', 5),
+            ...pickAll(3, '3.7.0'),
+            ...pickAll(4, '0.0.0'),
           ]
 
           console.log(`matrix=${JSON.stringify({ nuxt })}`)
