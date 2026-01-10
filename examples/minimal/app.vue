@@ -7,10 +7,10 @@ const { data: reports, pending } = useFetch('/api/reports')
     <header>
       <h1>Nuxt CSP Report · Minimal</h1>
       <p>
-        This example wires the module with <code>report-uri</code> and a file system store.
+        This example showcases <code>nuxt-csp-report</code> with <code>nuxt-security</code>. It uses <code>report-uri</code> and a file system store.
       </p>
       <div>
-        External image:
+        External image to trigger CSP violation:
         <img
           alt="External image"
           src="https://picsum.photos/200"

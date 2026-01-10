@@ -47,8 +47,10 @@ export default defineNuxtConfig({
 
 ## Examples
 
-- Minimal starter: [Open in CodeSandbox](https://codesandbox.io/p/sandbox/github/Gonzo17/nuxt-csp-report/tree/main/examples/minimal?file=nuxt.config.ts) · [Open in StackBlitz](https://stackblitz.com/github/Gonzo17/nuxt-csp-report/tree/main/examples/minimal?file=nuxt.config.ts). Source: [examples/minimal/nuxt.config.ts](examples/minimal/nuxt.config.ts) and [examples/minimal/app.vue](examples/minimal/app.vue).
-- Playground (used for development): [playground/nuxt.config.ts](playground/nuxt.config.ts) with nuxt-security defaults and extra logging.
+* Minimal starter: [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/github/Gonzo17/nuxt-csp-report/tree/main/examples/minimal?file=nuxt.config.ts)
+  * Source: [examples/minimal/nuxt.config.ts](examples/minimal/nuxt.config.ts) and [examples/minimal/app.vue](examples/minimal/app.vue). 
+  * StackBlitz runs inside an iframe; the example CSP allows `frame-ancestors` for `*.stackblitz.io`, `*.webcontainer.io`, and `*.local-credentialless.webcontainer.io`.
+* Playground (used for development): [playground/nuxt.config.ts](playground/nuxt.config.ts) with nuxt-security defaults and extra logging.
 
 ## Usage
 

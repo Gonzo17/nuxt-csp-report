@@ -12,9 +12,5 @@
     "nuxt": "^4.2.2",
     "nuxt-csp-report": "^1.0.0-alpha.2",
     "nuxt-security": "^2.5.0"
-  },
-  "engines": {
-    "node": ">=22.22.0"
-  },
-  "packageManager": "pnpm@9.12.3"
+  }
 }
