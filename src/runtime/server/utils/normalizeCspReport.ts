@@ -37,51 +37,60 @@ const reportToEntrySchema = z.object({
   type: z.string(),
   url: z.string(),
   user_agent: z.string(),
-}).passthrough()
+}).loose()
 
-const reportToSchema = reportToEntrySchema.array()
+const _reportToSchema = reportToEntrySchema.array()
 
 export type ReportToEntryFormat = z.infer<typeof reportToEntrySchema>
-export type ReportToFormat = z.infer<typeof reportToSchema>
+export type ReportToFormat = z.infer<typeof _reportToSchema>
 
 export function normalizeCspReport(
   input: unknown,
 ): NormalizedCspReport[] {
-  if (!input) {
-    return []
+  if (!input) return []
+
+  // Handle legacy report-uri payloads
+  if (typeof input === 'object' && input !== null && 'csp-report' in input) {
+    const parsed = reportUriSchema.safeParse(input)
+    if (!parsed.success) return []
+
+    const report = parsed.data['csp-report']
+    return [{
+      raw: parsed.data,
+      timestamp: Date.now(),
+      documentURL: report['document-uri'],
+      blockedURL: report['blocked-uri'],
+      directive: report['violated-directive'],
+      sourceFile: report['source-file'],
+      line: report['line-number'],
+      disposition: report['disposition'],
+    }]
   }
 
-  try {
-    if (typeof input === 'object' && 'csp-report' in input) {
-      const parsed = reportUriSchema.parse(input)
-      return [{ raw: parsed, timestamp: Date.now(),
-        documentURL: parsed['csp-report']['document-uri'],
-        blockedURL: parsed['csp-report']['blocked-uri'],
-        directive: parsed['csp-report']['violated-directive'],
-        sourceFile: parsed['csp-report']['source-file'],
-        line: parsed['csp-report']['line-number'],
-        disposition: parsed['csp-report']['disposition'],
-      }]
-    }
+  // Handle modern report-to batches; tolerate partially invalid items
+  if (Array.isArray(input)) {
+    const reports: NormalizedCspReport[] = []
 
-    if (Array.isArray(input)) {
-      const parsed = reportToSchema.parse(input)
-      return parsed.map((item) => {
-        return {
-          raw: item,
-          timestamp: Date.now(),
-          documentURL: item.body.documentURL,
-          blockedURL: item.body.blockedURL,
-          directive: item.body.effectiveDirective,
-          sourceFile: item.body.sourceFile,
-          line: item.body.lineNumber,
-          disposition: item.body.disposition,
-        } satisfies NormalizedCspReport
+    for (const entry of input) {
+      const parsed = reportToEntrySchema.safeParse(entry)
+      if (!parsed.success) continue
+      if (parsed.data.type !== 'csp-violation') continue
+
+      const { body } = parsed.data
+      reports.push({
+        raw: parsed.data,
+        timestamp: Date.now(),
+        documentURL: body.documentURL,
+        blockedURL: body.blockedURL,
+        directive: body.effectiveDirective,
+        sourceFile: body.sourceFile,
+        line: body.lineNumber,
+        column: body.columnNumber,
+        disposition: body.disposition,
       })
     }
-  }
-  catch {
-    // Ignore parsing errors
+
+    return reports
   }
 
   return []

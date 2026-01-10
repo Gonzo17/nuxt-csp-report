@@ -1,4 +1,4 @@
-import { useRuntimeConfig, useStorage, readBody, defineEventHandler } from '#imports'
+import { useRuntimeConfig, useStorage, readBody, defineEventHandler, setResponseStatus } from '#imports'
 import { normalizeCspReport } from '../utils/normalizeCspReport'
 import { formatCspLog } from '../utils/formatCspLog'
 import type { NormalizedCspReport } from '../../../types/report'
@@ -34,6 +34,7 @@ export default defineEventHandler(async (event) => {
   }
   catch (err) {
     console.error('[nuxt-csp-report]', err)
-    return { ok: true }
+    setResponseStatus(event, 500)
+    return { ok: false }
   }
 })
