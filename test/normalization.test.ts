@@ -87,6 +87,67 @@ describe('normalizeCspReport', () => {
       disposition: 'enforce' })
   })
 
+  it('keeps column number when provided', () => {
+    const reportToPayload = [
+      {
+        age: 6930,
+        url: 'https://example.com',
+        body: {
+          sample: 'console.log("lo")',
+          referrer: 'https://www.ecosia.org/',
+          blockedURL: 'inline',
+          lineNumber: 121,
+          columnNumber: 39,
+          sourceFile: 'https://example.com',
+          statusCode: 200,
+          disposition: 'enforce',
+          documentURL: 'https://example.com',
+          originalPolicy: 'default-src \'none\'; img-src \'self\'; report-to default',
+          effectiveDirective: 'script-src-elem',
+        },
+        type: 'csp-violation',
+        user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+      },
+    ]
+
+    const results = normalizeCspReport(reportToPayload)
+
+    expect(results[0]).toMatchObject({
+      line: 121,
+      column: 39,
+    })
+  })
+
+  it('skips invalid entries but keeps valid ones in report-to array', () => {
+    const reportToPayload = [
+      { invalid: true },
+      {
+        age: 15201,
+        url: 'https://example.com',
+        body: {
+          sample: '',
+          referrer: 'https://www.ecosia.org/',
+          blockedURL: 'https://evil.com/image.png',
+          statusCode: 200,
+          disposition: 'enforce',
+          documentURL: 'https://example.com',
+          originalPolicy: 'default-src \'none\'; img-src \'self\'; report-to default',
+          effectiveDirective: 'img-src',
+        },
+        type: 'csp-violation',
+        user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+      },
+    ]
+
+    const results = normalizeCspReport(reportToPayload)
+
+    expect(results).toHaveLength(1)
+    expect(results[0]).toMatchObject({
+      directive: 'img-src',
+      blockedURL: 'https://evil.com/image.png',
+    })
+  })
+
   it('normalizes report-uri violation', () => {
     const reportToPayload = {
       'csp-report': {
