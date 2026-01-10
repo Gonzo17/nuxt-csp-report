@@ -5,11 +5,16 @@
   "scripts": {
     "dev": "nuxt dev --hostname 0.0.0.0 --port 3000",
     "build": "nuxt build",
-    "preview": "nuxt preview"
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "nuxt": "latest",
-    "nuxt-csp-report": "latest",
-    "nuxt-security": "latest"
-  }
+    "nuxt": "^4.2.2",
+    "nuxt-csp-report": "^1.0.0-alpha.2",
+    "nuxt-security": "^2.5.0"
+  },
+  "engines": {
+    "node": ">=18.18.0"
+  },
+  "packageManager": "pnpm@9.12.3"
 }
