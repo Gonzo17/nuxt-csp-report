@@ -7,6 +7,8 @@
 
 A Nuxt module for collecting, normalizing, and persisting Content Security Policy (CSP) reports.
 
+**Compatibility:** Nuxt 3 (3.12.0 and newer) and Nuxt 4.
+
 [✨&nbsp;Release Notes](/CHANGELOG.md)
 
 ## What is CSP and CSP reports?
@@ -46,11 +48,11 @@ export default defineNuxtConfig({
 ## Usage
 
 The module is ready to go with the defaults.
-In most use cases simple logs are sufficient. If you want to analyze CSP reports, you can use the `storage` option to persist the reports in a KV store. 
+In most use cases simple logs are sufficient. If you want to analyze CSP reports, you can use the `storage` option to persist the reports in a KV store.
 
 ### nuxt-security
 
-The Content Security Policy is set through specific headers. You can handle that yourself with Nuxt/Nitro, but I highly recommend using [nuxt-security](https://github.com/Baroshem/nuxt-security). 
+The Content Security Policy is set through specific headers. You can handle that yourself with Nuxt/Nitro, but I highly recommend using [nuxt-security](https://github.com/Baroshem/nuxt-security).
 Here is a minimal example of how to use the two moduls in combination:
 
 ```typescript
@@ -80,7 +82,7 @@ export default defineNuxtConfig({
         name: 'redis',
         options: {
           // Your redis configuration
-        } 
+        }
       }
     },
   },
@@ -100,12 +102,12 @@ const storage = useStorage<NormalizedCspReport>('csp-report-storage')
 * Default: `/api/csp-report`
 * Description: Optional. Path for the CSP report endpoint.
 
-### reportingEndpointsHeader 
+### reportingEndpointsHeader
 * Type: `boolean`
 * Default: `false`
 * Description: Optional. Adds the `Reporting-Endpoints` header to your HTML responses, using `'csp-endpoint'` as the key and `endpoint` from the configuration as the value. This header is needed if you want to use `report-to csp-endpoint` in your CSP configuration.
 
-### console 
+### console
 * Type: `'summary' | 'full' | false`
 * Default: `'summary'`
 * Description: Optional. Log reports to console on server. `'full'` will print the `NormalizedCspReport` object.
@@ -121,7 +123,7 @@ const storage = useStorage<NormalizedCspReport>('csp-report-storage')
   * https://nitro.build/guide/storage
   * https://unstorage.unjs.io/drivers
 
-### storage.keyPrefix 
+### storage.keyPrefix
 * Type: `string`
 * Default: `csp-report`
 * Description: Optional. Key prefix for the stored reports.
@@ -131,30 +133,30 @@ const storage = useStorage<NormalizedCspReport>('csp-report-storage')
 
 <details>
   <summary>Local development</summary>
-  
+
   ```bash
   # Install dependencies
   pnpm install
-  
+
   # Generate type stubs
   pnpm run dev:prepare
-  
+
   # Develop with the playground
   pnpm run dev
-  
+
   # Build the playground
   pnpm run dev:build
-  
+
   # Run ESLint
   pnpm run lint
-  
+
   # Run Vitest
   pnpm run test
   pnpm run test:watch
-  
+
   # Build the module
   pnpm run prepack
-  
+
   # Release new version
   pnpm run release
   ```
