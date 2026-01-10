@@ -1,4 +1,24 @@
 
+## v1.0.0-alpha.3
+
+[compare changes](https://github.com/Gonzo17/nuxt-csp-report/compare/v1.0.0-alpha.2...v1.0.0-alpha.3)
+
+### 🚀 Enhancements
+
+- **examples:** Add minimal example for Stackblitz ([#1](https://github.com/Gonzo17/nuxt-csp-report/pull/1))
+
+### 🏡 Chore
+
+- Replace npm with pnpm ([#10](https://github.com/Gonzo17/nuxt-csp-report/pull/10))
+
+### ✅ Tests
+
+- **module:** Add matrix with Nuxt versions to run all tests against ([#7](https://github.com/Gonzo17/nuxt-csp-report/pull/7))
+
+### ❤️ Contributors
+
+- David Gonzalez Casin <david.gonzalezcasin@gmail.com>
+
 ## v1.0.0-alpha.2
 
 [compare changes](https://github.com/Gonzo17/nuxt-csp-report/compare/v1.0.0-alpha.1...v1.0.0-alpha.2)

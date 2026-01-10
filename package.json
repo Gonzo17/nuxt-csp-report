@@ -1,6 +1,6 @@
 {
   "name": "nuxt-csp-report",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "A Nuxt module for collecting, normalizing, and persisting Content Security Policy reports",
   "repository": {
     "type": "git",
