@@ -25,17 +25,17 @@ jobs:
       - run: npm i -g --force corepack@latest && corepack enable
 
       - name: Install dependencies
-        run: npx nypm@latest i
+        run: pnpm install
 
       - name: Lint
-        run: npm run lint
+        run: pnpm lint
 
   test:
     name: Test (Nuxt ${{ matrix.nuxt }})
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nuxt: ["4.0.0", "4.1.0", "4.2.0"]
+        nuxt: ["4.0.0", "4.1.0", "4.2.0", "latest"]
 
     steps:
       - uses: actions/checkout@v6
@@ -52,13 +52,13 @@ jobs:
           echo "Selected Nuxt version: ${{ matrix.nuxt }}"
 
       - name: Install dependencies
-        run: npx nypm@latest i --no-frozen-lockfile
+        run: pnpm install --no-frozen-lockfile
 
       - name: Show installed Nuxt version
         run: node -e "console.log(require('nuxt/package.json').version)"
 
       - name: Playground prepare
-        run: npm run dev:prepare
+        run: pnpm dev:prepare
 
       - name: Test
-        run: npm run test
+        run: pnpm test
