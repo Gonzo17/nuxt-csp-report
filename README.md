@@ -1,4 +1,8 @@
-# Nuxt CSP Report
+<p align="center">
+  <img src="./assets/logo.svg" width="160" alt="nuxt-csp-report" />
+</p>
+
+# nuxt-csp-report
 
 [![npm version][npm-version-src]][npm-version-href]
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
