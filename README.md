@@ -8,6 +8,7 @@
 [![npm downloads][npm-downloads-src]][npm-downloads-href]
 [![License][license-src]][license-href]
 [![Nuxt][nuxt-src]][nuxt-href]
+[![nuxt.care health](https://img.shields.io/endpoint?url=https://nuxt.care/api/badge/nuxt-csp-report)](https://nuxt.care/?search=nuxt-csp-report)
 
 A Nuxt module for collecting, normalizing, and persisting Content Security Policy (CSP) reports.
 
