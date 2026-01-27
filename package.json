@@ -70,5 +70,5 @@
   "peerDependencies": {
     "nuxt": ">=3.12.0 <5"
   },
-  "packageManager": "pnpm@10.28.1"
+  "packageManager": "pnpm@10.28.2"
 }
